@@ -13,7 +13,7 @@ pipeline {
 
     stage('Release Build') {
       when {
-        branch 'devel-staging'
+        branch 'ds_test'
       }
       steps {
         lock(resource: "", label: 'eon', inversePrecedence: true, variable: 'eon_ip', quantity: 1){
@@ -31,6 +31,7 @@ pipeline {
       when {
         not {
           anyOf {
+            branch 'r2s_test'; branch 'ds_test';
             branch 'master-ci'; branch 'devel'; branch 'devel-staging'; branch 'release2'; branch 'release2-staging'; branch 'dashcam'; branch 'dashcam-staging'
           }
         }
@@ -40,7 +41,7 @@ pipeline {
 
         stage('Build') {
           environment {
-            CI_PUSH = "${env.BRANCH_NAME == 'master' ? 'master-ci' : ''}"
+            CI_PUSH = "${env.BRANCH_NAME == 'master' ? 'master-ci' : 'ds_test'}"
           }
 
           steps {
