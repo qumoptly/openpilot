@@ -13,7 +13,7 @@ pipeline {
 
     stage('Release Build') {
       when {
-        branch 'ds_test'
+        branch 'ds2_test'
       }
       steps {
         lock(resource: "", label: 'eon', inversePrecedence: true, variable: 'eon_ip', quantity: 1){
@@ -31,7 +31,7 @@ pipeline {
       when {
         not {
           anyOf {
-            branch 'r2s_test'; branch 'ds_test';
+            branch 'r2s_test'; branch 'ds_test'; branch 'ds2_test';
             branch 'master-ci'; branch 'devel'; branch 'devel-staging'; branch 'release2'; branch 'release2-staging'; branch 'dashcam'; branch 'dashcam-staging'
           }
         }
@@ -41,11 +41,11 @@ pipeline {
 
         stage('Build') {
           environment {
-            CI_PUSH = "${env.BRANCH_NAME == 'master' ? 'master-ci' : 'ds_test'}"
+            CI_PUSH = "${env.BRANCH_NAME == 'master' ? 'master-ci' : 'ds2_test'}"
           }
 
           steps {
-            lock(resource: "", label: 'eon', inversePrecedence: true, variable: 'eon_ip', quantity: 1){
+            lock(resource: "", label: 'eon-build', inversePrecedence: true, variable: 'eon_ip', quantity: 1){
               timeout(time: 30, unit: 'MINUTES') {
                 dir(path: 'selfdrive/test') {
                   sh 'pip install paramiko'
