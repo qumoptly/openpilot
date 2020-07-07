@@ -16,7 +16,7 @@ pipeline {
         branch 'ds2_test'
       }
       steps {
-        lock(resource: "", label: 'eon', inversePrecedence: true, variable: 'eon_ip', quantity: 1){
+        lock(resource: "", label: 'eon-build', inversePrecedence: true, variable: 'eon_ip', quantity: 1){
           timeout(time: 60, unit: 'MINUTES') {
             dir(path: 'selfdrive/test') {
               sh 'pip install paramiko'
@@ -45,7 +45,7 @@ pipeline {
           }
 
           steps {
-            lock(resource: "", label: 'eon-build', inversePrecedence: true, variable: 'eon_ip', quantity: 1){
+            lock(resource: "", label: 'eon', inversePrecedence: true, variable: 'eon_ip', quantity: 1){
               timeout(time: 30, unit: 'MINUTES') {
                 dir(path: 'selfdrive/test') {
                   sh 'pip install paramiko'
